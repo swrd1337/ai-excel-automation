@@ -9,6 +9,8 @@ and 22 invariants that must not be broken. Each links to the decision in
 
 ## Getting set up
 
+You need **Node.js 24 or newer**: the build scripts are TypeScript run directly by `node`.
+
 ```bash
 npm install
 npm run desktop        # builds and opens the window

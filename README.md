@@ -43,7 +43,7 @@ it** as a requirement rather than a feature.
 
 - **macOS** — Windows should work through the same add-in, but it is untested ([status](#status))
 - **Microsoft Excel for Mac**, version 16 or later
-- **Node.js 20+**
+- **Node.js 24+** — the build runs `scripts/build.ts` directly, which needs Node's native TypeScript support
 - A **DeepSeek API key** — DeepSeek is the provider today; Claude is planned
 
 ## Quick start

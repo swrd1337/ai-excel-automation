@@ -58,7 +58,7 @@
     "url": "https://github.com/swrd1337/ai-excel-automation/issues"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "keywords": [
     "excel",
