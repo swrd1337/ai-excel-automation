@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  Add-in manifest (add-in only manifest, TaskPaneApp).
+  {{BASE_URL}} is substituted per request by app/server.ts from the Host header, and
+  locally by app/setup.ts when it writes the file into Excel's folder.
+
+  Validate after any change:
+      npm run validate:manifest
+  That caught two errors here which Excel had been tolerating silently: <Requirements>
+  in a position the schema does not allow, and a <Version> below the 1.0 minimum.
+
+  There was a VersionOverrides block here declaring a shared runtime, to make the pane
+  keep running after it was closed and start with the workbook. It was removed: its
+  auto-open turned out to be document-scoped — it does not apply to a document's first
+  open, so it never removed the one manual step it was added for — and a manifest that
+  declares a requirement set the client does not honour is a real way to break loading.
+  The pane simply stays open, which is one instruction and no risk.
+-->
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:type="TaskPaneApp">
+  <Id>7f3c1a52-9b4e-4d61-8c07-2ae5f0d91b34</Id>
+  <!-- Above 1.0.0.0, which the schema requires and which the M0 spike already used. -->
+  <Version>1.1.0.0</Version>
+  <ProviderName>AI Spreadsheet Automation</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="AI Spreadsheet Automation"/>
+  <Description DefaultValue="Describe a task in plain language and the assistant carries it out in the open workbook. Powered by DeepSeek."/>
+  <IconUrl DefaultValue="{{BASE_URL}}/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="{{BASE_URL}}/assets/icon-80.png"/>
+  <SupportUrl DefaultValue="{{BASE_URL}}/"/>
+  <AppDomains>
+    <AppDomain>{{BASE_URL}}</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Workbook"/>
+  </Hosts>
+  <!-- Between <Hosts> and <DefaultSettings>: after <Permissions> the schema rejects it. -->
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="ExcelApi" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="{{BASE_URL}}/taskpane.html"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+</OfficeApp>

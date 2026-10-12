@@ -1,0 +1,55 @@
+name: Feature request
+description: Suggest a new Excel operation, provider, or behaviour
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before proposing a new Excel tool, note the rule this project holds to: **a tool is not
+        done until it can be undone.** See "Adding a new Excel tool" in
+        [CONTRIBUTING.md](https://github.com/swrd1337/ai-excel-automation/blob/main/CONTRIBUTING.md).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do
+      description: The task in your own words, not the feature. What do you ask the assistant for?
+      placeholder: |
+        "chart this by month and put it on its own sheet" — and it cannot make a new sheet yet.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of change is this
+      options:
+        - A new Excel operation (tool)
+        - A new model provider
+        - The desktop window or its behaviour
+        - Setup, installation or packaging
+        - Documentation
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: undo
+    attributes:
+      label: If this is a new Excel operation, how should it be undone?
+      description: |
+        Range of cells that stays put → the existing snapshot covers it. Creates an object, or
+        changes things outside the range it was given → it needs a new undo kind. If you are not
+        sure, say so; that is a useful answer too.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked TODO.md — it may already be planned, or deliberately deferred
+          required: true
+        - label: I searched existing issues and discussions
+          required: true

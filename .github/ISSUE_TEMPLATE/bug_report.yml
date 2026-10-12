@@ -1,0 +1,73 @@
+name: Bug report
+description: Something did not work, or Excel did something unexpected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Two things make bugs here dramatically easier to fix: the
+        **Diagnostics output** from Excel, and the **exact task text** you used.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you asked for, what the app did, and what you expected instead.
+      placeholder: |
+        I asked: "remove duplicate rows in A1:D50"
+        It removed them but the row below the range was gone too.
+    validations:
+      required: true
+
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics output
+      description: |
+        In Excel, open the taskpane → **Diagnostics** tab → **Run all** → copy the result.
+        This covers the Office.js behaviour the app depends on, and is very often the whole answer.
+      render: text
+    validations:
+      required: false
+
+  - type: input
+    id: excel-version
+    attributes:
+      label: Excel version
+      description: Excel → About Excel. The Diagnostics output includes it too.
+      placeholder: '16.113.920.2'
+    validations:
+      required: false
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - macOS
+        - Windows
+        - Other (please say so below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console output, if you have it
+      description: |
+        The window is Electron: **View → Toggle Developer Tools → Console**. The taskpane has its
+        own console inside Excel. **Please remove your API key from anything you paste** — it should
+        never appear in a log, but check.
+      render: text
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I removed any API key from logs or screenshots
+          required: true
+        - label: I searched existing issues for the same problem
+          required: true

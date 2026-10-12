@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Setup help and troubleshooting
+    url: https://github.com/swrd1337/ai-excel-automation/blob/main/app/README.md
+    about: The add-in will not load, Excel says the certificate is invalid, or the pane will not connect — start here.
+  - name: Architecture and design decisions
+    url: https://github.com/swrd1337/ai-excel-automation/blob/main/docs/DECISIONS.md
+    about: Why the app is built this way, including the approaches that were tried and did not work.
+  - name: Security issue
+    url: https://github.com/swrd1337/ai-excel-automation/security/advisories/new
+    about: Please report vulnerabilities privately, not as a public issue.

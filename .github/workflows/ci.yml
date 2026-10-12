@@ -1,0 +1,30 @@
+name: CI
+
+# Runs on macOS because that is the only platform this app has been verified on: the
+# certificate handling branches on darwin, and several tests exercise the macOS-only setup
+# path. A Linux job would be cheaper and would prove less.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - run: npm ci
+
+      # The suite builds the server itself, and touches no keychain, no workbook and no API
+      # key — see "Tests must never touch the live setup" in AGENTS.md.
+      - run: npm test
+
+      # The React app is typechecked separately: it must not see Node or Office globals.
+      - run: npm run typecheck:ui

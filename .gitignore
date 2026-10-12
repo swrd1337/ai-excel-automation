@@ -1,0 +1,13 @@
+# Generated — never edit, and never commit.
+node_modules/
+dist/
+
+# Package caches created by the install in this environment.
+.npm-cache/
+.electron-cache/
+
+# macOS
+.DS_Store
+
+# Local logs
+*.log

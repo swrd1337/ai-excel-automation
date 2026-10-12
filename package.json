@@ -1,0 +1,85 @@
+{
+  "name": "ai-excel-automation",
+  "version": "0.4.0",
+  "description": "Drive your installed Microsoft Excel from plain English, with a real undo for every change. Local-first Electron + Office.js add-in, powered by DeepSeek.",
+  "type": "module",
+  "main": "dist/app/electron/main.js",
+  "scripts": {
+    "build": "node scripts/build.ts",
+    "build:server": "node scripts/build.ts --no-ui",
+    "build:ui": "vite build",
+    "typecheck:ui": "tsc -p tsconfig.ui.json",
+    "desktop": "npm run build && electron .",
+    "desktop:fast": "electron .",
+    "dev:ui": "vite",
+    "start": "npm run build && node dist/app/server.js",
+    "serve": "npm run build:server && node dist/app/server.js",
+    "preview": "npm run build:server && NODE_EXTRA_CA_CERTS=$HOME/.office-addin-dev-certs/ca.crt node dist/scripts/ui-preview.js",
+    "test": "npm run build:server && node dist/app/selftest.js",
+    "probe:search": "npm run build:server && node dist/scripts/probe-search.js",
+    "validate:manifest": "npm run build:server && node dist/scripts/validate-manifest.js",
+    "trust-cert": "npm run build:server && node dist/scripts/trust-cert.js",
+    "setkey": "npm run build:server && node dist/app/setkey.js"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-switch": "^1.1.2",
+    "@radix-ui/react-tooltip": "^1.1.6",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.469.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.1",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^26.6.2",
+    "@types/office-js": "^1.0.609",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^7.0.2",
+    "vite": "^6.0.7"
+  },
+  "license": "MIT",
+  "author": "Alexei",
+  "homepage": "https://github.com/swrd1337/ai-excel-automation#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swrd1337/ai-excel-automation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/swrd1337/ai-excel-automation/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "excel",
+    "microsoft-excel",
+    "excel-addin",
+    "office-js",
+    "office-addins",
+    "spreadsheet",
+    "spreadsheet-automation",
+    "automation",
+    "ai",
+    "llm",
+    "ai-agent",
+    "tool-calling",
+    "natural-language",
+    "deepseek",
+    "electron",
+    "react",
+    "typescript",
+    "macos",
+    "local-first",
+    "privacy"
+  ]
+}
