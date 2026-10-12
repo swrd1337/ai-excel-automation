@@ -1,107 +1,73 @@
-# Publishing this to GitHub
+# Publishing notes
 
-Everything is prepared; this is the exact sequence. Replace nothing — the URLs already point at
-`github.com/swrd1337/ai-excel-automation`.
+**Published: <https://github.com/swrd1337/ai-excel-automation>** — public, MIT, CI green.
 
-## What is already in place
+This file is the record of how it was published and what is left to do by hand. It is not
+instructions any more; the steps below are already done.
 
-| File | Why it is there |
+## What is in place
+
+| File | Why |
 |---|---|
-| `README.md` | Rewritten for a visitor: what it is, why it is different, how to run it, honest status |
-| `LICENSE` | MIT, `Copyright (c) 2026 Alexei` — **check the name before you push** |
+| `README.md` | Written for a visitor: hook, screenshot, why it is different, quick start, the undo model, honest status |
+| `LICENSE` | MIT, `Copyright (c) 2026 Alexei` |
 | `CONTRIBUTING.md` | Setup, the three rules most likely to be broken, how to add a tool |
 | `SECURITY.md` | How to report privately, and what this app's security model actually is |
-| `.github/workflows/ci.yml` | Runs `npm test` and the UI typecheck on macOS, on push and PR |
-| `.github/ISSUE_TEMPLATE/` | Bug and feature forms, both asking for the Diagnostics output |
+| `.github/workflows/ci.yml` | `npm test` + the UI typecheck on macOS, on push and PR |
+| `.github/ISSUE_TEMPLATE/` | Bug and feature forms, both asking for Diagnostics output |
 | `.github/pull_request_template.md` | The checklist that catches the common mistakes |
 | `docs/images/app.png` | The screenshot the README shows |
-| `package.json` | Description, licence, keywords, repository, issues URL, `engines` |
+| `package.json` | Description, licence, 20 keywords, repository, issues URL, `engines: >=24` |
 
-`private: true` was removed from `package.json` on purpose — it reads as "not meant to be used".
+The About box carries the description and **all 20 topics** — that is what GitHub search and Google
+index, so it matters more than anything inside the README.
 
-## 1. Feel the state of the repo
+## Two things publishing caught that nothing else had
 
-```bash
-cd /Users/swrd1337/Develop/ai-excel-automation
-npm test              # 67 checks, and it also compiles everything
-npm run build         # full build, including the UI bundle
-```
+Both were found before anyone else saw them, which is the whole argument for CI and for push
+protection. Worth remembering, because neither was visible locally.
 
-Both must be green before anything becomes public.
+**1. The Node floor was wrong.** The first CI run failed with
+`ERR_UNKNOWN_FILE_EXTENSION: Unknown file type ".ts" for scripts/build.ts`. The build scripts are
+TypeScript **run directly by `node`**, which needs Node's native type stripping — unflagged from
+Node 23.6/24, absent in Node 20. `engines` said `>=20`, the README said "Node 20+", and CI was
+pinned to 20. All three now say 24. Nothing on the development machine could have revealed this,
+because the development machine is not Node 20.
 
-## 2. Initialise and commit
+**2. GitHub's push protection blocked the first push** over a test fixture —
+`sk-abcdefghijklmnopqrstuvwxyz012345` in `app/selftest.ts`. Obviously fake to a person, and
+indistinguishable from a leaked key to a scanner. The fixture is now *assembled* at runtime
+(`['sk','fixture','not','areal','key'].join('-')`) rather than written as a literal, so there is
+nothing to match and nobody has to maintain an allow-list entry to push a fork. The reasoning is in
+a comment above it, because the obvious "fix" is to restore a realistic-looking key.
 
-There is no git repository here yet, so this is the first one.
+## What still needs doing by hand
 
-```bash
-git init -b main
-git add -A
-git status --short | wc -l     # expect a few hundred files, NOT tens of thousands
-git commit -m "AI Spreadsheet Automation: natural-language control of installed Excel"
-```
+- [ ] **Social preview image** — Settings → Social preview. A 1280×640 crop of
+      `docs/images/app.png`. It is what appears when the link is shared anywhere.
+- [ ] **Private vulnerability reporting** — Settings → Code security. `SECURITY.md` tells people to
+      use it, so it should exist.
+- [ ] **Discussions** — only if you want to answer them. An empty Discussions tab is worse than none.
+- [ ] **Check the copyright name in `LICENSE`** if it should say something other than "Alexei".
 
-If `git status` lists anything under `node_modules/`, `dist/` or `.npm-cache/`, stop — the
-`.gitignore` is not being applied and you are about to commit a few hundred megabytes.
+## What to decide before this gets popular
 
-## 3. Create the repository
+These are the parts that are fine for one machine and not for many. Each is in `TODO.md` with more
+detail.
 
-With the GitHub CLI:
-
-```bash
-gh repo create ai-excel-automation --public --source=. --remote=origin --push
-```
-
-Or through the web UI: create **ai-excel-automation**, public, **without** a README, licence or
-`.gitignore` (this repo already has all three), then:
-
-```bash
-git remote add origin https://github.com/swrd1337/ai-excel-automation.git
-git push -u origin main
-```
-
-## 4. Set the About box — this is the discoverability
-
-The description and topics are what GitHub search and Google actually index, so they matter more
-than anything inside the README.
-
-**Description** (paste into the About field):
-
-> Drive your installed Microsoft Excel from plain English — with a real undo for every change.
-> Local-first Electron + Office.js add-in, powered by DeepSeek.
-
-**Website**: leave empty for now, or point at the repository.
-
-**Topics** — paste these one at a time in the About box, or all at once:
-
-```bash
-gh repo edit --add-topic excel,microsoft-excel,excel-addin,office-js,office-addins,ai,llm,ai-agent,agent,natural-language,spreadsheet,spreadsheet-automation,automation,deepseek,electron,typescript,react,macos,local-first,privacy
-```
-
-Those 20 are chosen so that the repo appears for both kinds of search: someone looking for
-`excel add-in office-js` (the technology) and someone looking for `ai spreadsheet automation`
-(the job). `excel-addin` and `office-js` are the two highest-intent.
-
-## 5. After the first push
-
-- **Watch the CI run.** It is the first time this has ever run anywhere but your Mac. If it fails
-  for an environment reason rather than a real one, delete the badge line in `README.md` and the
-  workflow, rather than leaving a red badge on a public repo.
-- **Add a social preview image**: Settings → Social preview. A 1280×640 crop of
-  `docs/images/app.png` is the honest choice, and it is what shows up when the link is shared.
-- **Enable private vulnerability reporting**: Settings → Code security → Private vulnerability
-  reporting, so `SECURITY.md`'s instruction actually works.
-- **Turn on Discussions** only if you want to answer them. An empty Discussions tab is worse than
-  none.
-
-## 6. Things to decide before this gets popular
-
-Written down here because they are the parts that are fine for one machine and not for many:
-
-- **The manifest version drifts from `package.json`** (`1.1.0.0` vs `0.4.0`). Two numbers that move
-  independently will disagree. See `TODO.md` §0.
+- **No packaged build.** Every user is currently a developer running `npm install` and
+  `npm run trust-cert`. This is the biggest barrier to anyone actually using it, and the natural
+  next milestone — `.dmg` first, then the Windows question.
+- **One workbook at a time.** Two workbooks open and whichever taskpane polls wins the call. This is
+  the one remaining hole that can put a change into a file the user did not ask for. A *stale* undo
+  is caught by the journal fingerprint; two live taskpanes racing is not. A *Workbook identity*
+  Diagnostics check was added to measure which identifier can fix it — run it before building this.
 - **`remove_duplicates`'s undo rests on a measurement** taken once, on one Excel build, with nothing
-  refusing if it stops being true. `TODO.md` §0 has the detail.
-- **One workbook at a time.** Two workbooks open and whichever taskpane polls wins the call — the
-  one remaining hole that can put a change in a file the user did not ask for. §1.
-- **No packaged build**, so every user is currently a developer running `npm install`. That is the
-  biggest barrier to anyone actually using this, and it is the natural next milestone.
+  refusing if it stops being true.
+- **The manifest version drifts from `package.json`** (`1.1.0.0` vs `0.4.0`).
+
+## Adding a release later
+
+There is no released version yet. When there is one, the pattern that fits this repository is a
+`.dmg` attached to a GitHub Release, with the manifest `Version` bumped in the same commit as
+`package.json` — which is the drift above, and the reason to fix it first.
